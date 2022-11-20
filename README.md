@@ -1,3 +1,3 @@
 # Rogue_Nethack
 Creating a Rogue like game using C <br />
-Enter <make> to run the program <br /> 
+Enter "make" in the dir to run the program <br /> 
