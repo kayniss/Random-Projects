@@ -11,6 +11,10 @@
 #define TROLL 3
 #define PATHFINDING_SEEKING 2
 #define PATHFINDING_RANDOM 1
+#define PLAYER_ORDER 1 
+#define MONSTER_ORDER 0
+#define MONSTER_ALIVE 1
+#define MONSTER_DEAD 0
 
 typedef struct Level {
     char ** tiles;
@@ -43,6 +47,7 @@ typedef struct Room {
 typedef struct Player {
     Position * position;
     int health;
+    int attack;
     // Room * room;
 } Player;
 
@@ -54,7 +59,9 @@ typedef struct Monster {
     int speed;
     int defence;
     int pathfinding;
+    int alive;
     Position * position;
+
 } Monster;
 
 int screenSetUp();
@@ -67,7 +74,7 @@ Level * createLevel(int level);
 // player functions 
 Player * playerSetUp();
 Position * handleInput(int input, Player * user);
-int checkPosition(Position * newPosition, Player * unit, char ** level);
+int checkPosition(Position * newPosition, Level * level);
 int playerMove(Position * newPosition, Player * user, char ** level);
 
 /* room functions */
@@ -83,5 +90,9 @@ int setStartingPosition(Monster * monster, Room * room);
 int moveMonsters(Level * level);
 int pathfindingSeek(Position * start, Position * destination);
 int pathfindingRandom(Position * position);
+Monster * getMonsterAt(Position * position, Monster ** monsters);
+int killMonster(Monster * monster);
+
+int combat(Player * player, Monster * monster, int order);
 
 #endif

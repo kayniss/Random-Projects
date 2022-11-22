@@ -62,11 +62,21 @@ Monster * createMonster(char symbol, int health, int attack, int speed, int defe
     newMonster->speed = speed;
     newMonster->defence = defence;
     newMonster->pathfinding = pathfinding;
+    newMonster->alive = MONSTER_ALIVE;
 
     sprintf(newMonster->string, "%c", symbol);
 
     return newMonster;
 }
+
+int killMonster(Monster * monster) {
+
+    mvprintw(monster->position->y, monster->position->x, ".");
+    monster->alive = MONSTER_DEAD;
+
+    return 1;
+}
+
 
 int setStartingPosition(Monster * monster, Room * room) {
 
@@ -81,9 +91,14 @@ int setStartingPosition(Monster * monster, Room * room) {
 int moveMonsters(Level * level) {
 
     int x;
+
     for (x = 0; x < level->number_of_monsters; x++) {
 
+        if (level->monsters[x]->alive == MONSTER_DEAD)
+            continue;
+
         mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, ".");
+
         if (level->monsters[x]->pathfinding == PATHFINDING_RANDOM) {
             // random
             pathfindingRandom(level->monsters[x]->position);
@@ -160,6 +175,18 @@ int pathfindingSeek(Position * start, Position * destination) {
     }
    
     return 1;
+}
+
+Monster * getMonsterAt(Position * position, Monster ** monsters) {
+
+    int x;
+    for (x = 0; x < 6; x++) {
+        if ((position->y == monsters[x]->position->y) && (position->x == monsters[x]->position->x)) {
+            return monsters[x];
+        }
+    }
+
+    return NULL;
 }
 
 /*
