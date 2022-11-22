@@ -111,10 +111,7 @@ int connectDoors(Position * doorOne, Position * doorTwo) {
         }
 
         mvprintw(temp.y, temp.x, "#");
-
-        getch();
     }
-
 
     return 1;
 }

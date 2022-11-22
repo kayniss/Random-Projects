@@ -5,6 +5,15 @@
 #include <stdlib.h>
 #include <time.h>
 
+typedef struct Level {
+    char ** tiles;
+    int level;
+    int number_of_rooms;
+    struct Room ** rooms;
+    struct Monster ** monsters;
+    int number_of_monsters;
+} Level;
+
 typedef struct Position {
     int y;
     int x;
@@ -28,11 +37,22 @@ typedef struct Player {
     // Room * room;
 } Player;
 
+typedef struct Monster {
+    char symbol;
+    int health;
+    int attack;
+    int speed;
+    int defence;
+    int pathfinding;
+    Position position;
+} Monster;
+
 int screenSetUp();
 
 // level/map functions 
-Room ** mapSetUp();
+Room ** roomsSetUp();
 char ** saveLevelPositions();
+Level * createLevel(int level);
 
 // player functions 
 Player * playerSetUp();
@@ -44,5 +64,12 @@ int playerMove(Position * newPosition, Player * user, char ** level);
 Room * createRoom(int y, int x, int height, int width);
 int drawRoom(Room * room);
 int connectDoors(Position * doorOne, Position * doorTwo);
+
+/* monster functions */
+int addMonsters(Level * level);
+Monster * selectMonster(int level);
+Monster * createMonster(char symbol, int health, int attack, int speed, int defence, int pathfinding);
+int setStartingPosition(Monster * monster, Room * room);
+
 
 #endif
