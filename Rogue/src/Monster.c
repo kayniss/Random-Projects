@@ -82,15 +82,60 @@ int moveMonsters(Level * level) {
 
     int x;
     for (x = 0; x < level->number_of_monsters; x++) {
+
+        mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, ".");
         if (level->monsters[x]->pathfinding == PATHFINDING_RANDOM) {
             // random
+            pathfindingRandom(level->monsters[x]->position);
         } else if (level->monsters[x]->pathfinding == PATHFINDING_SEEKING) {
             // seeking
-            mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, ".");
             pathfindingSeek(level->monsters[x]->position, level->user->position);
-            mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, level->monsters[x]->string);
         }
+        mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, level->monsters[x]->string);
     }
+}
+
+int pathfindingRandom(Position * position) {
+    
+    int random;
+
+    random = rand() % 5;
+
+    switch (random) {
+        // step up (mvinch() returns the character at the coord)
+        case 0:
+            if (mvinch(position->y - 1, position->x) == '.') {
+                position->y = position->y - 1;
+            }
+            break;
+
+        // step down
+        case 1:
+            if (mvinch(position->y + 1, position->x) == '.') {
+                position->y = position->y + 1;
+            }
+            break;
+
+        // step left
+        case 2:
+            if (mvinch(position->y, position->x - 1) == '.') {
+                position->x = position->x - 1;
+            }
+            break;
+
+        // step right
+        case 3:
+            if (mvinch(position->y , position->x + 1) == '.') {
+                position->x = position->x + 1;
+            }
+            break;
+
+        // do nothing
+        case 4:
+            break;
+    }
+
+    return 1;
 }
 
 int pathfindingSeek(Position * start, Position * destination) {

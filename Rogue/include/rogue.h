@@ -82,5 +82,6 @@ Monster * createMonster(char symbol, int health, int attack, int speed, int defe
 int setStartingPosition(Monster * monster, Room * room);
 int moveMonsters(Level * level);
 int pathfindingSeek(Position * start, Position * destination);
+int pathfindingRandom(Position * position);
 
 #endif
