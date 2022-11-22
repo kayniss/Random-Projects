@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define BUFFER_LENGTH 8
+#define SPIDER 1
+#define GOBLIN 2
+#define TROLL 3
+#define PATHFINDING_SEEKING 2
+#define PATHFINDING_RANDOM 1
+
 typedef struct Level {
     char ** tiles;
     int level;
@@ -12,6 +19,7 @@ typedef struct Level {
     struct Room ** rooms;
     struct Monster ** monsters;
     int number_of_monsters;
+    struct Player * user;
 } Level;
 
 typedef struct Position {
@@ -31,20 +39,22 @@ typedef struct Room {
     // Item ** items;
 } Room;
 
+//  Just use the address-of operator "&", i.e. &(player->position) to turn a position into a pointer!
 typedef struct Player {
-    Position position;
+    Position * position;
     int health;
     // Room * room;
 } Player;
 
 typedef struct Monster {
+    char string[2];
     char symbol;
     int health;
     int attack;
     int speed;
     int defence;
     int pathfinding;
-    Position position;
+    Position * position;
 } Monster;
 
 int screenSetUp();
@@ -70,6 +80,7 @@ int addMonsters(Level * level);
 Monster * selectMonster(int level);
 Monster * createMonster(char symbol, int health, int attack, int speed, int defence, int pathfinding);
 int setStartingPosition(Monster * monster, Room * room);
-
+int moveMonsters(Level * level);
+int pathfindingSeek(Position * start, Position * destination);
 
 #endif

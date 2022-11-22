@@ -37,17 +37,17 @@ Monster * selectMonster(int level) {
 
     switch (monster) {
         // spider
-        case 1: 
+        case SPIDER: 
             getch();
-            return createMonster('X', 2, 1, 1, 1, 1);
+            return createMonster('X', 2, 1, 1, 1, PATHFINDING_RANDOM);
         // goblin
-        case 2:
+        case GOBLIN:
             getch();
-            return createMonster('G', 5, 3, 1, 1, 2);
+            return createMonster('G', 5, 3, 1, 1, PATHFINDING_SEEKING);
         // troll
-        case 3:
+        case TROLL:
             getch();
-            return createMonster('T', 15, 5, 1, 1, 1);
+            return createMonster('T', 15, 5, 1, 1, PATHFINDING_RANDOM);
     }
 }
 
@@ -63,19 +63,58 @@ Monster * createMonster(char symbol, int health, int attack, int speed, int defe
     newMonster->defence = defence;
     newMonster->pathfinding = pathfinding;
 
+    sprintf(newMonster->string, "%c", symbol);
+
     return newMonster;
 }
 
 int setStartingPosition(Monster * monster, Room * room) {
 
-    char buffer[8];
+    monster->position = malloc(sizeof(Position));
 
-    monster->position.x = (rand() % (room->width - 2)) + room->position.x + 1;
-    monster->position.y = (rand() % (room->height - 2)) + room->position.y + 1;
+    monster->position->x = (rand() % (room->width - 2)) + room->position.x + 1;
+    monster->position->y = (rand() % (room->height - 2)) + room->position.y + 1;
 
-    sprintf(buffer, "%c", monster->symbol);
+    mvprintw(monster->position->y, monster->position->x, monster->string);
+}
 
-    mvprintw(monster->position.y, monster->position.x, buffer);
+int moveMonsters(Level * level) {
+
+    int x;
+    for (x = 0; x < level->number_of_monsters; x++) {
+        if (level->monsters[x]->pathfinding == PATHFINDING_RANDOM) {
+            // random
+        } else if (level->monsters[x]->pathfinding == PATHFINDING_SEEKING) {
+            // seeking
+            mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, ".");
+            pathfindingSeek(level->monsters[x]->position, level->user->position);
+            mvprintw(level->monsters[x]->position->y, level->monsters[x]->position->x, level->monsters[x]->string);
+        }
+    }
+}
+
+int pathfindingSeek(Position * start, Position * destination) {
+
+    // step left
+    if ((abs((start->x - 1) - destination->x) < abs(start->x - destination->x)) && mvinch(start->y, start->x - 1) == '.') {
+        start->x = start->x - 1;
+    }
+    // step right
+    else if ((abs((start->x + 1) - destination->x) < abs(start->x - destination->x)) && mvinch(start->y, start->x + 1) == '.') {
+        start->x = start->x + 1;
+    }
+    // step down
+    else if ((abs((start->y + 1) - destination->y) < abs(start->y - destination->y)) && mvinch(start->y + 1, start->x) == '.') {
+        start->y = start->y + 1;
+    }
+    // step up
+    else if ((abs((start->y - 1) - destination->y) < abs(start->y - destination->y)) && mvinch(start->y - 1, start->x) == '.') {
+        start->y = start->y - 1;
+    } else {
+        // do nothing
+    }
+   
+    return 1;
 }
 
 /*
