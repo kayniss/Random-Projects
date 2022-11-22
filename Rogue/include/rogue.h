@@ -48,6 +48,9 @@ typedef struct Player {
     Position * position;
     int health;
     int attack;
+    int gold;
+    int maxHealth;
+    int exp;
     // Room * room;
 } Player;
 
@@ -64,7 +67,9 @@ typedef struct Monster {
 
 } Monster;
 
+// screen functions
 int screenSetUp();
+int printGameHub(Level * level);
 
 // level/map functions 
 Room ** roomsSetUp();
@@ -76,9 +81,10 @@ Player * playerSetUp();
 Position * handleInput(int input, Player * user);
 int checkPosition(Position * newPosition, Level * level);
 int playerMove(Position * newPosition, Player * user, char ** level);
+int placePlayer(Room ** rooms, Player * user);
 
 /* room functions */
-Room * createRoom(int y, int x, int height, int width);
+Room * createRoom(int grid);
 int drawRoom(Room * room);
 int connectDoors(Position * doorOne, Position * doorTwo);
 

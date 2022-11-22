@@ -10,9 +10,11 @@ int main () {
     screenSetUp();
 
     level = createLevel(1);
+    printGameHub(level);
 
     // main game loop
     while ((ch = getch()) != 'q') {
+        printGameHub(level);
         newPosition = handleInput(ch, level->user);
         checkPosition(newPosition, level);
         moveMonsters(level);
@@ -22,15 +24,3 @@ int main () {
 
     return 0;
 }
-
-int screenSetUp() {
-    initscr();
-    printw("Hello world!");
-    noecho(); // whatever you type shows on screen, disabled with this
-    refresh();
-
-    srand(time(NULL));
-
-    return 1;
-}
-

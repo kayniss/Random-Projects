@@ -38,15 +38,12 @@ Monster * selectMonster(int level) {
     switch (monster) {
         // spider
         case SPIDER: 
-            getch();
             return createMonster('X', 2, 1, 1, 1, PATHFINDING_RANDOM);
         // goblin
         case GOBLIN:
-            getch();
             return createMonster('G', 5, 3, 1, 1, PATHFINDING_SEEKING);
         // troll
         case TROLL:
-            getch();
             return createMonster('T', 15, 5, 1, 1, PATHFINDING_RANDOM);
     }
 }
