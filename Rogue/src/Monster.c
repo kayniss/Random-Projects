@@ -6,7 +6,7 @@ int addMonsters(Level * level) {
     level->monsters = malloc(sizeof(Monster *)* 6);
     level->number_of_monsters = 0;
 
-    for (x = 0; x < level->number_of_rooms; x++) {
+    for (x = 0; x < level->numberOfRooms; x++) {
         if ((rand() % 2) == 0) {
             level->monsters[level->number_of_monsters] = selectMonster(level->level);
             setStartingPosition(level->monsters[level->number_of_monsters], level->rooms[x]);

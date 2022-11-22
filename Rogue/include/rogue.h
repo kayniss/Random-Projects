@@ -9,7 +9,7 @@
 typedef struct Level {
     char ** tiles;
     int level;
-    int number_of_rooms;
+    int numberOfRooms;
     struct Room ** rooms;
     struct Monster ** monsters;
     int number_of_monsters;
@@ -27,13 +27,18 @@ typedef struct Room {
     int height;
     int width;
 
-    Position ** doors;
+    struct Door ** doors;
+    int numberOfDoors;
     // Pointer of an array of monsters and items 
     // Monster ** monsters;
     // Item ** items;
 } Room;
 
-//  Just use the address-of operator "&", i.e. &(player->position) to turn a position into a pointer!
+typedef struct Door {
+    Position position;
+    int connected;
+} Door;
+
 typedef struct Player {
     Position * position;
     int health;
@@ -80,6 +85,7 @@ int printGameHub(Level * level);
 Room ** roomsSetUp();
 char ** saveLevelPositions();
 Level * createLevel(int level);
+void connectDoors(Level * level);
 
 // player functions 
 Player * playerSetUp();
@@ -89,9 +95,8 @@ int playerMove(Position * newPosition, Player * user, char ** level);
 int placePlayer(Room ** rooms, Player * user);
 
 /* room functions */
-Room * createRoom(int grid);
+Room * createRoom(int grid, int numberOfDoors);
 int drawRoom(Room * room);
-int connectDoors(Position * doorOne, Position * doorTwo);
 
 /* monster functions */
 int addMonsters(Level * level);

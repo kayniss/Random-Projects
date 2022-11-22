@@ -2,7 +2,6 @@
 
 int screenSetUp() {
     initscr();
-    printw("Hello world!");
     noecho(); // whatever you type shows on screen, disabled with this
     refresh();
 
