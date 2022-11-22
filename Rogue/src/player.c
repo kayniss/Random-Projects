@@ -2,48 +2,52 @@
 
 Player * playerSetUp() {
     Player * newPlayer;
-    newPlayer = malloc(sizeof(Player)); 
+    newPlayer = malloc(sizeof(Player));
+    newPlayer->position = malloc(sizeof(Position)); 
 
-    newPlayer->position.x = 14;
-    newPlayer->position.y = 14;
+    newPlayer->position->x = 14;
+    newPlayer->position->y = 14;
     newPlayer->health = 20;
+    newPlayer->attack = 1;
 
-    playerMove(14, 14, newPlayer);
+    mvprintw(newPlayer->position->y, newPlayer->position->x, "@");
+    move(newPlayer->position->y, newPlayer->position->x);
 
     return newPlayer;
 }
 
-int handleInput(int input, Player * user) {
+Position * handleInput(int input, Player * user) {
     
-    int new_y;
-    int new_x;
+    Position * newPosition;
+    newPosition = malloc(sizeof(Position));
+
     switch (input) {
         // move up
         case 'w':
         case 'W':
-            new_y = user->position.y - 1;
-            new_x = user->position.x;
+            newPosition->y = user->position->y - 1;
+            newPosition->x = user->position->x;
             break;
 
         // move down
         case 's':
         case 'S':
-            new_y = user->position.y + 1;
-            new_x = user->position.x;
+            newPosition->y = user->position->y + 1;
+            newPosition->x = user->position->x;
             break;
 
         // move left
         case 'a':
         case 'A':
-            new_y = user->position.y;
-            new_x = user->position.x - 1;
+            newPosition->y = user->position->y;
+            newPosition->x = user->position->x - 1;
             break;
 
         // move right
         case 'd':
         case 'D':
-            new_y = user->position.y;
-            new_x = user->position.x + 1;
+            newPosition->y = user->position->y;
+            newPosition->x = user->position->x + 1;
             break;
 
         default:
@@ -51,30 +55,45 @@ int handleInput(int input, Player * user) {
 
     }
 
-    checkPosition(new_y, new_x, user);
+    return newPosition;
 }
 
 // check what is at the next position
-int checkPosition(int new_y, int new_x, Player * user) {
+int checkPosition(Position * newPosition, Level * level) {
 
+    Player * user;
+    user = level->user;
     int space;
-    switch (mvinch(new_y, new_x)) {
+
+    switch (mvinch(newPosition->y, newPosition->x)) {
         case '.':
-            playerMove(new_y, new_x, user);
+        case '#':
+        case '+':
+            playerMove(newPosition, user, level->tiles);
             break;
+        case 'X':
+            combat(user, getMonsterAt(newPosition, level->monsters), PLAYER_ORDER);
+        case 'G':
+            combat(user, getMonsterAt(newPosition, level->monsters), PLAYER_ORDER);
+        case 'T':
+            combat(user, getMonsterAt(newPosition, level->monsters), PLAYER_ORDER);
         default:
-            move(user->position.y, user->position.x);
+            move(user->position->y, user->position->x);
             break;
     }
 }
 
-int playerMove(int y, int x, Player * user) {
+int playerMove(Position * newPosition, Player * user, char ** level) {
     
-    mvprintw(user->position.y, user->position.x, ".");
+    char buffer[BUFFER_LENGTH];
 
-    user->position.y = y;
-    user->position.x = x;
+    sprintf(buffer, "%c", level[user->position->y][user->position->x]);
 
-    mvprintw(user->position.y, user->position.x, "@");
-    move(user->position.y, user->position.x);
+    mvprintw(user->position->y, user->position->x, buffer);
+
+    user->position->y = newPosition->y;
+    user->position->x = newPosition->x;
+
+    mvprintw(user->position->y, user->position->x, "@");
+    move(user->position->y, user->position->x);
 }
