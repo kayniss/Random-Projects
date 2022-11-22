@@ -6,7 +6,7 @@ int addMonsters(Level * level) {
     level->monsters = malloc(sizeof(Monster *)* 6);
     level->number_of_monsters = 0;
 
-    for (x = 0; x < level->number_of_rooms; x++) {
+    for (x = 0; x < level->numberOfRooms; x++) {
         if ((rand() % 2) == 0) {
             level->monsters[level->number_of_monsters] = selectMonster(level->level);
             setStartingPosition(level->monsters[level->number_of_monsters], level->rooms[x]);
@@ -38,15 +38,12 @@ Monster * selectMonster(int level) {
     switch (monster) {
         // spider
         case SPIDER: 
-            getch();
             return createMonster('X', 2, 1, 1, 1, PATHFINDING_RANDOM);
         // goblin
         case GOBLIN:
-            getch();
             return createMonster('G', 5, 3, 1, 1, PATHFINDING_SEEKING);
         // troll
         case TROLL:
-            getch();
             return createMonster('T', 15, 5, 1, 1, PATHFINDING_RANDOM);
     }
 }

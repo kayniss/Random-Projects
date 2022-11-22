@@ -5,21 +5,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define BUFFER_LENGTH 8
-#define SPIDER 1
-#define GOBLIN 2
-#define TROLL 3
-#define PATHFINDING_SEEKING 2
-#define PATHFINDING_RANDOM 1
-#define PLAYER_ORDER 1 
-#define MONSTER_ORDER 0
-#define MONSTER_ALIVE 1
-#define MONSTER_DEAD 0
-
+/**************** Struct Definitions ****************/
 typedef struct Level {
     char ** tiles;
     int level;
-    int number_of_rooms;
+    int numberOfRooms;
     struct Room ** rooms;
     struct Monster ** monsters;
     int number_of_monsters;
@@ -37,17 +27,25 @@ typedef struct Room {
     int height;
     int width;
 
-    Position ** doors;
+    struct Door ** doors;
+    int numberOfDoors;
     // Pointer of an array of monsters and items 
     // Monster ** monsters;
     // Item ** items;
 } Room;
 
-//  Just use the address-of operator "&", i.e. &(player->position) to turn a position into a pointer!
+typedef struct Door {
+    Position position;
+    int connected;
+} Door;
+
 typedef struct Player {
     Position * position;
     int health;
     int attack;
+    int gold;
+    int maxHealth;
+    int exp;
     // Room * room;
 } Player;
 
@@ -64,23 +62,41 @@ typedef struct Monster {
 
 } Monster;
 
+/***************** Global Variables *****************/
+int MAX_HEIGHT;
+int MAX_WIDTH;
+#define BUFFER_LENGTH 8
+#define SPIDER 1
+#define GOBLIN 2
+#define TROLL 3
+#define PATHFINDING_SEEKING 2
+#define PATHFINDING_RANDOM 1
+#define PLAYER_ORDER 1 
+#define MONSTER_ORDER 0
+#define MONSTER_ALIVE 1
+#define MONSTER_DEAD 0
+
+
+// screen functions
 int screenSetUp();
+int printGameHub(Level * level);
 
 // level/map functions 
 Room ** roomsSetUp();
 char ** saveLevelPositions();
 Level * createLevel(int level);
+void connectDoors(Level * level);
 
 // player functions 
 Player * playerSetUp();
 Position * handleInput(int input, Player * user);
 int checkPosition(Position * newPosition, Level * level);
 int playerMove(Position * newPosition, Player * user, char ** level);
+int placePlayer(Room ** rooms, Player * user);
 
 /* room functions */
-Room * createRoom(int y, int x, int height, int width);
+Room * createRoom(int grid, int numberOfDoors);
 int drawRoom(Room * room);
-int connectDoors(Position * doorOne, Position * doorTwo);
 
 /* monster functions */
 int addMonsters(Level * level);
