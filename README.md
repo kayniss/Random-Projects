@@ -10,3 +10,6 @@ Uses an entered romaji to find all corresponding japanese words <br />
 
 ## rogue
 Creating a Rogue like game using C <br />
+
+## Chess
+Chess engine using C <br />
