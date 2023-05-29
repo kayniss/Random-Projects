@@ -1,4 +1,5 @@
 #include "rogue.h"
+#include "utils.h"
 
 // typedef struct Level
 // {

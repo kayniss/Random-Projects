@@ -44,8 +44,8 @@ Monster * selectMonster(int level) {
             return createMonster('G', 5, 3, 1, 1, PATHFINDING_SEEKING);
         // troll
         case TROLL:
-            return createMonster('T', 15, 5, 1, 1, PATHFINDING_RANDOM);
-    }
+                return createMonster('T', 15, 5, 1, 1, PATHFINDING_RANDOM);
+        }
 }
 
 Monster * createMonster(char symbol, int health, int attack, int speed, int defence, int pathfinding) {
